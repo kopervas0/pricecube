@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { fetchProducts, fetchStats, triggerSync } from './api/client'
+import { exportUrl, fetchProducts, fetchStats, triggerSync } from './api/client'
 import type { Product, Stats } from './api/types'
+import ProductModal from './components/ProductModal'
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>([])
@@ -10,6 +11,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
   const [error, setError] = useState('')
+  const [selected, setSelected] = useState<Product | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -91,6 +93,13 @@ export default function App() {
         <button onClick={() => void handleSync()} disabled={syncing}>
           {syncing ? 'Синхронизация…' : 'Синхронизировать'}
         </button>
+        <div className="spacer" />
+        <a className="btn" href={exportUrl('csv')} download>
+          ⬇ CSV
+        </a>
+        <a className="btn" href={exportUrl('xlsx')} download>
+          ⬇ XLSX
+        </a>
       </div>
 
       {error && <div className="empty" style={{ color: 'var(--danger)' }}>{error}</div>}
@@ -113,7 +122,7 @@ export default function App() {
           </thead>
           <tbody>
             {products.map((p) => (
-              <tr key={p.id}>
+              <tr key={p.id} className="clickable" onClick={() => setSelected(p)}>
                 <td className="dim">{p.offer_id}</td>
                 <td>{p.name}</td>
                 <td className="dim">{p.category}</td>
@@ -150,6 +159,10 @@ export default function App() {
             })}
           </div>
         </div>
+      )}
+
+      {selected && (
+        <ProductModal product={selected} onClose={() => setSelected(null)} />
       )}
     </div>
   )

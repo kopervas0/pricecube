@@ -15,3 +15,8 @@ export interface Stats {
   total_stock: number
   by_category: { category: string; count: number; avg_price: number }[]
 }
+
+export interface PricePoint {
+  price: number
+  created_at: string
+}

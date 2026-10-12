@@ -1,4 +1,4 @@
-import type { Product, Stats } from './types'
+import type { PricePoint, Product, Stats } from './types'
 
 const BASE = '/api'
 
@@ -24,4 +24,17 @@ export async function triggerSync(): Promise<{ result: unknown }> {
   const res = await fetch(`${BASE}/products/sync/`, { method: 'POST' })
   if (!res.ok) throw new Error(`sync error ${res.status}`)
   return res.json()
+}
+
+export async function fetchHistory(id: number): Promise<PricePoint[]> {
+  return get(`${BASE}/products/${id}/history/`)
+}
+
+// Экспорт отчётов — открываем ссылку, браузер скачает файл
+export function exportUrl(format: 'csv' | 'xlsx'): string {
+  return `${BASE}/export/?format=${format}`
+}
+
+export function exportHistoryUrl(id: number): string {
+  return `${BASE}/export/history/${id}/`
 }

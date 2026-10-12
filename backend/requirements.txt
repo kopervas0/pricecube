@@ -6,3 +6,5 @@ celery>=5.4
 redis>=5.0
 requests>=2.32
 python-dotenv>=1.0
+pandas>=2.2
+openpyxl>=3.1
