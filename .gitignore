@@ -19,3 +19,7 @@ dist/
 
 # Docker
 pgdata/
+
+# Логи сборки
+build*.log
+build*.err
